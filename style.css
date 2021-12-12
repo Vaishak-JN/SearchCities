@@ -1,0 +1,16 @@
+p.valid {
+  display: none;
+}
+p.invalid {
+  color: red;
+  display: block;
+}
+input {
+  border: 3px solid #ccc;
+  outline: none !important;
+}
+
+input.invalid {
+  border: 2px solid red;
+  outline: none;
+}
