@@ -54,11 +54,13 @@ search.addEventListener("keyup", (event) => {
     const regexp = /^[a-z]{1,}$/ig;
     if (regexp.test(val)) {
         document.querySelector("#error").className = "valid"
+        search.classList.remove("invalid")
         searchCities(val)
-        search.className("valid")
+        // search.className("valid")
     } else {
         document.querySelector("#error").className = "invalid"
-        search.className("invalid")
+        search.classList.add("invalid")
+        search.classList.remove("valid")
     }
     console.log(val)
 
