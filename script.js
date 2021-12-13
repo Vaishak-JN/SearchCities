@@ -8,12 +8,9 @@ const loadData = async () => {
     try {
         const res = await fetch("https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json")
         const data = await res.json()
-
         console.log(data)
-
         cities = data;
         display(cities);
-
     } catch (error) {
         console.log(error)
     }
@@ -25,14 +22,14 @@ const display = (cities) => {
     if (cities.length > 0) {
 
         cities.forEach((city) => {
-            display = display + `<div class="card my-3 mx-auto col-lg-5 text-muted">
-        <h5 class="card-header bg-dark text-light">${city.city}</h5>
-        <div class="p-3"><h6>Growth : ${city.growth_from_2000_to_2013}</h6>
-        <h6>Latitude : ${city.latitude}</h6>
-        <h6>Longitude : ${city.longitude}</h6>
-        <h6>Population : ${city.population}</h6>
-        <h6>State : ${city.state}</h6></div>
-    </div>`
+            display = display + `<div class="card my-3 mx-auto col-lg-5">
+                    <h5 class="card-header bg-dark text-light">${city.city}</h5>
+                    <div class="p-3"><h6>Growth : ${city.growth_from_2000_to_2013}</h6>
+                    <h6>Latitude : ${city.latitude}</h6>
+                    <h6>Longitude : ${city.longitude}</h6>
+                    <h6>Population : ${city.population}</h6>
+                    <h6>State : ${city.state}</h6></div>
+                </div>`
         });
 
     } else {
@@ -50,13 +47,19 @@ document.onload = loadData();
 
 search.addEventListener("keyup", (event) => {
     event.preventDefault();
+    document.querySelector("#error").className = "valid"
     const val = event.target.value
     const regexp = /^[a-z]{1,}$/ig;
-    if (regexp.test(val)) {
+    if (val === "") {
+        search.classList.add("valid")
+        search.classList.remove("invalid")
+        loadData()
+    } else if (regexp.test(val)) {
         document.querySelector("#error").className = "valid"
         search.classList.remove("invalid")
         searchCities(val)
         // search.className("valid")
+
     } else {
         document.querySelector("#error").className = "invalid"
         search.classList.add("invalid")
@@ -68,10 +71,12 @@ search.addEventListener("keyup", (event) => {
 
 const searchCities = (val) => {
     const filteredCities = cities.filter((city) => {
-        // const regex = /`${val}`/ig;
         const regex = new RegExp(`${val}`, "gi")
+        console.log(city.city.match(regex))
         return city.city.match(regex) || city.state.match(regex)
+        // or
+        // return regex.test(city.city) || regex.test(city.state)
     })
-
+    console.log(filteredCities)
     display(filteredCities)
 };
